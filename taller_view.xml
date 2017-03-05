@@ -1,0 +1,219 @@
+<openerp>
+	<data>
+		<act_window
+			id="action_propietari"
+			name="Propietaris"
+			res_model="taller.propietari"
+			view_mode="tree,form"
+		/>
+
+		<act_window
+			id="action_cotxe"
+			name="Vehicles"
+			res_model="taller.cotxe"
+			view_mode="tree,form,calendar,graph,kanban"
+		/>
+
+		<act_window
+			id="action_mecanic"
+			name="Mecànics"
+			res_model="taller.mecanic"
+			view_mode="tree,form"
+		/>
+
+		<menuitem
+			id="main_menu_taller"
+			name="Taller de cotxes" />
+
+		<menuitem
+			id="submenu_taller_propietari"
+			name="Llistat de propietaris" 
+			parent="main_menu_taller"
+			action="action_propietari"
+			/>
+
+		<menuitem
+			id="submenu_taller_cotxe"
+			name="Llistat de cotxes" 
+			parent="main_menu_taller"
+			action="action_cotxe"
+			/>
+
+		<menuitem
+			id="submenu_taller_mecanic"
+			name="Llistat de mecànics" 
+			parent="main_menu_taller"
+			action="action_mecanic"
+			/>		
+
+		<record id="llista_cotxes" model="ir.ui.view">
+			<field name="name">Cotxes</field>
+			<field name="model">taller.cotxe</field>
+			<field name="arch" type="xml">
+
+				<tree colors="red:reparat==False">
+					<field name="tipus"/>
+					<field name="marca"/>
+					<field name="model"/>
+					<field name="color"/>
+					<field name="portes"/>
+					<field name="matricula"/>
+					<field name="numbastidor"/>
+					<field name="combustible"/>
+					<field name="comentaris"/>
+					<field name="propietari"/>
+					<field name="reparat"/>
+		
+				</tree>
+			</field>
+		</record>
+
+
+		<record id="llista_cotxes_form" model="ir.ui.view">
+			<field name="name">Formulari de cotxes</field>
+			<field name="model">taller.cotxe</field>
+			<field name="arch" type="xml">
+
+				<form>
+					<sheet>
+						<group>
+							<field name="marca"/>
+							<field name="model"/>
+							<field name="tipus"/>
+							<field name="matricula"/>
+							<field name="numbastidor"/>
+							<field name="propietari"/>
+							<field name="reparat"/>
+							<field name="datasortida" attrs="{'invisible':[('reparat', '=', False)]}"/>
+						</group>
+						<group>
+							<field name="color"/>
+							<field name="portes"/>
+							<field name="combustible"/>
+							<field name="comentaris"/>
+							
+						</group>
+					</sheet>	
+				</form>
+			</field>
+		</record>
+
+		<record id="llista_props" model="ir.ui.view">
+			<field name="name">Propietaris</field>
+			<field name="model">taller.propietari</field>
+			<field name="arch" type="xml">
+
+				<tree>
+					<field name="nom"/>
+					<field name="telf"/>
+					<field name="adreca"/>
+		
+				</tree>
+			</field>
+		</record>
+
+		<record id="llista_mecanics" model="ir.ui.view">
+			<field name="name">Mecànics</field>
+			<field name="model">taller.mecanic</field>
+			<field name="arch" type="xml">
+
+				<tree>
+					<field name="dni"/>
+					<field name="nom"/>
+					<field name="cognom"/>
+					<field name="reparacions"/>
+		
+				</tree>
+			</field>
+		</record>
+
+		<record id="llista_mecanics_form" model="ir.ui.view">
+			<field name="name">Mecànics</field>
+			<field name="model">taller.mecanic</field>
+			<field name="arch" type="xml">
+
+				<form>
+					<sheet>
+						<group>
+							<field name="dni"/>
+							<field name="nom"/>
+							<field name="cognom"/>
+
+						</group>
+						<group>
+							<field name="reparacions"/>
+							
+						</group>
+					</sheet>	
+				</form>
+			</field>
+		</record>
+
+		<record id="calendari_cotxes" model="ir.ui.view">
+		<field name="name">Calendari d'entrades de cotxes</field>
+		<field name="model">taller.cotxe</field>
+		<field name="arch" type="xml">
+
+			<calendar date_start="data_entrada" data_stop="datasortida" 				color="propietari">
+				<field name="matricula"/>
+				<field name="marca"/>
+
+			</calendar>
+		</field>
+		</record>
+
+		<record id="graphic_count_matricula" model="ir.ui.view">
+		<field name="name">Estadística: quantitat de visites</field>
+		<field name="model">taller.cotxe</field>
+		<field name="arch" type="xml">
+			<graph type="pivot">
+			<field name="matricula" type="col"/>
+			<field name="propietari"/>
+			<field name="data_entrada" interval="week"/>
+			</graph>
+
+		</field>
+		</record>	
+
+		<record id="cotxes_kanban" model="ir.ui.view">
+		<field name="name">KanBan Taller de cotxes</field>
+		<field name="model">taller.cotxe</field>
+		<field name="arch" type="xml">
+		<kanban>
+			<templates>
+				<t t-name="kanban-box">
+				<div class="oe_kanban_card">
+        				<div class="oe_kanban_content">
+            				<table>
+<tr>			
+					<td><a type="open">
+              				  <field name="propietari" />
+               				 </a></td>
+					<td><a type="edit">
+              				  <field name="propietari" />
+               				 </a></td>
+					<td><a type="delete">
+              				  <field name="propietari" />
+               				 </a></td>  
+</tr>
+</table>       				 
+<field style="font-weight: bold" name="matricula" />
+               				 <ul>
+                   			 <li><field name="marca" /></li>
+                   			 <li><field name="model" /></li>
+                   			 <li><field name="data_entrada" /></li>
+                   			 <li><field name="datasortida" /></li>
+               				 </ul>
+                
+      			  </div>
+   			 </div>
+				</t>
+			</templates>
+
+		</kanban>
+		</field>
+		</record>
+
+	</data>
+
+</openerp>
